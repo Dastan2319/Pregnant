@@ -9,4 +9,5 @@ admin.site.register(models.Preparation)
 admin.site.register(models.User)
 admin.site.register(models.NeededItems)
 admin.site.register(models.News)
+admin.site.register(models.MaternityHospital)
 
