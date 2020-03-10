@@ -34,7 +34,13 @@ class NeededItems(models.Model):
     quantity = f.IntegerField()
     recommendationAddress = f.CharField(max_length=100) #типо рекламы
 
+class MaternityHospital(models.Model):
+    name = f.CharField(max_length=50)
+
+
 class Feedback(models.Model):
     user = models.ForeignKey(User,on_delete = models.CASCADE)
     text = models.TextField(null=False)
+    maternity_hospital = models.ForeignKey(MaternityHospital,on_delete = models.CASCADE)
+
 
