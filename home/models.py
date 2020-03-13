@@ -42,5 +42,3 @@ class Feedback(models.Model):
     user = models.ForeignKey(User,on_delete = models.CASCADE)
     text = models.TextField(null=False)
     maternity_hospital = models.ForeignKey(MaternityHospital,on_delete = models.CASCADE)
-
-
