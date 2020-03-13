@@ -10,10 +10,10 @@
     <v-app>
     <div class="d-flex">
          <v-card
-              class="ml-12 mt-4"
+              class="ml-12 mt-6 menu mr-12"
             >
               <v-list>
-                <v-list-item-group v-model="model">
+                <v-list-item-group v-model="model" >
                     <v-list-item
                         v-for="(item, i) in menu"
                         :key="i"
@@ -28,6 +28,54 @@
                     </v-list-item-group>
                 </v-list>
             </v-card>
+
+            <div>
+                {% for item in news %}
+                <v-card max-width="1000px" class="mt-6">
+                    <v-list-item>
+                        <v-list-item-content>
+                            <v-list-item-title class="headline">{{item.name}}</v-list-item-title>
+                             <v-list-item-subtitle>Дата публикаций:{{item.date_add}}</v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                    <v-img
+                        src="{{item.img}}"
+                    ></v-img>
+
+                    <v-card-text>{{item.text}}</v-card-text>
+
+
+                </v-card>
+
+                {% endfor %}
+            </div>
+
+            <div class="mt-6 ml-12">
+                <v-btn @click="dialog = true">Создать новости</v-btn>
+
+                <v-dialog v-model="dialog" max-width="500px" >
+                        <v-card class="pa-6">
+                            <v-card>
+                                <v-card-title class="headline">Добавление новости</v-card-title>
+                                <hr>
+                                <form method="POST" class="d-flex flex-column">
+                                    {% csrf_token %}
+                                    <label>Название</label>
+                                    <input class="newsFormInput" class="label" type="text" name="name" />
+                                    <label>Текст</label>
+                                    <textarea class="newsFormInput" name="text" ></textarea>
+                                    <label>URL фото</label>
+                                    <input  class="newsFormInput" type="text" name="img" />
+                                    <label>Теги (через пробел)</label>
+                                    <input class="newsFormInput" type="text" name="tags" />
+
+                                    <input type="submit" />
+                                </form>
+                            </v-card>
+                        </v-card>
+                </v-dialog>
+            </div>
         <div>
         
         </div>
@@ -47,6 +95,7 @@
             return{
                 menu:[{name:'Главная страница',url:'index'},{name:'Форум',url:'forum'},{name:'Срочная помощь'},{name:'Подготовка к ребенку'},{name:'Отзывы'}],
                 model:'',
+                dialog:false,
             }
       }
     })
@@ -55,8 +104,15 @@
 </html>
 
 <style>
+.newsFormInput
+{
+    border:1px solid black;
+    border-radius:5px;
+}
     .menu{
-        display:flex;
-        justify-content: space-around;
+        height:300px;
+    }
+    .NewsText{
+        width:600px;
     }
 </style>
