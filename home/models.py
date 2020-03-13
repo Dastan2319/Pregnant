@@ -20,6 +20,23 @@ class User(models.Model):
     isActive = True
     date_add = f.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.name
+
+class roles(models.Model):
+    name = f.CharField(max_length=100)
+    description = f.TextField(null=True)
+
+    def __str__(self):
+        return str(self.id)+' '+self.name
+
+class user_roles(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    roles = models.ForeignKey(roles, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.user.name) + ' имеет права ' + self.roles.name
+
 class Comments(models.Model):
     user = models.ForeignKey(User,on_delete = models.CASCADE)
     topic=models.ForeignKey(Topic,on_delete = models.CASCADE)

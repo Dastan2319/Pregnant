@@ -10,4 +10,5 @@ admin.site.register(models.User)
 admin.site.register(models.NeededItems)
 admin.site.register(models.News)
 admin.site.register(models.MaternityHospital)
-
+admin.site.register(models.roles)
+admin.site.register(models.user_roles)
