@@ -15,14 +15,11 @@
             <v-spacer></v-spacer>
             <div class="toolberBtns">
                 <v-btn v-model="enter">Войти</v-btn>
-                <v-btn v-model="register">Регестрация</v-btn>
             </div>
         </v-toolbar>
     <v-app>
-
-        <div >
-            <v-container class="d-flex">
-             <v-card class=" mt-6 menu mr-6">
+        <v-container class="d-flex">
+              <v-card class=" mt-6 menu mr-6">
                 <v-list>
                     <v-list-item-group v-model="model" >
                         <v-list-item
@@ -36,62 +33,26 @@
                         </v-list-item-group>
                     </v-list>
                </v-card>
+            <form method="POST" class="d-flex flex-column pa-12 regForm elevation-3 mt-6 justify-space-around ">
+                {% csrf_token %}
+                {% if form.errors %}
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="errors">
+                                 <v-alert type="error" dismissible>
+                                    {{error}}
+                                </v-alert>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+                <label>Логин:{{form.name}}</label>
+                <label>Пароль:{{form.password}}</label>
+                <label>Повторите пароль:{{form.confirm_password}}</label>
+                <v-btn type="submit" >Зарегистрироваться</v-btn>
 
-            <div>
-                {% for item in news %}
-                <v-card max-width="750px" class="mt-6">
-                    <v-list-item>
-                        <v-list-item-content>
-                            <v-list-item-title class="headline">{{item.name}}</v-list-item-title>
-                             <v-list-item-subtitle>Дата публикаций:{{item.date_add}}</v-list-item-subtitle>
-                        </v-list-item-content>
-                        <div>
-                            <v-btn @click="editNews({item})">Изменить</v-btn>
-                        </div>
-                    </v-list-item>
-
-                    <v-img class="ma-12"
-                        src="{{item.img}}"
-                    ></v-img>
-
-                    <v-card-text>{{item.text}}</v-card-text>
-
-
-                </v-card>
-
-                {% endfor %}
-            </div>
-
-            <div class="mt-6 ml-12">
-                <v-btn @click="dialog = true">Создать новости</v-btn>
-
-                <v-dialog v-model="dialog" max-width="500px" >
-                        <v-card class="pa-6">
-                            <v-card>
-                                <v-card-title class="headline">Добавление новости</v-card-title>
-                                <hr>
-                                <form method="POST" class="d-flex flex-column">
-                                    {% csrf_token %}
-                                    <label>Название</label>
-                                    <input class="newsFormInput" v-model="news_name" class="label" type="text" name="name" />
-                                    <label>Текст</label>
-                                    <textarea v-model="news_text" class="newsFormInput" name="text" ></textarea>
-                                    <label>URL фото</label>
-                                    <input  v-model="news_img" class="newsFormInput" type="text" name="img" />
-                                    <label>Теги (через пробел)</label>
-                                    <input v-model="news_tag" class="newsFormInput" type="text" name="tags" />
-
-                                    <input type="submit" />
-                                </form>
-                            </v-card>
-                        </v-card>
-                </v-dialog>
-            </div>
-        <div>
-        
-        </div>
-    </v-container>
-    </div>
+            </form>
+        </v-container >
     </v-app>
   </div>
 </body>
@@ -131,6 +92,12 @@
 
 
 <style>
+.errors
+{
+    position: absolute;
+    top: -60px;
+    right: 10px;
+}
 .toolberBtns
 {
     margin-right:100px;

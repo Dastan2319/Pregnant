@@ -3,6 +3,6 @@ from home import views
 
 urlpatterns = [
     path('', views.index),
-    path('show/<int:id>',views.showNews)
+    path('reg',views.register)
 
 ]

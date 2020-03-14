@@ -8,15 +8,15 @@ class News(models.Model):
     img = f.TextField()
     tags = f.TextField()
     date_add = f.DateTimeField(auto_now_add=True)
-
+# Topic это для форума название темы обсуждения
 class Topic(models.Model):
     title = f.TextField(null=False)
     text = f.TextField(null=False)
     date_add = f.DateTimeField(auto_now_add=True)
 
 class User(models.Model):
-    name = f.CharField(max_length=100)
-    password = f.CharField(max_length=20)
+    name = f.CharField(max_length=100,null=False)
+    password = f.CharField(max_length=20,null=False)
     isActive = True
     date_add = f.DateTimeField(auto_now_add=True)
 
