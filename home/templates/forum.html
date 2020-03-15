@@ -38,25 +38,17 @@
                </v-card>
 
             <div>
-                {% for item in news %}
-                <v-card max-width="750px" class="mt-6">
+                {% for item in topic %}
+                <v-card max-width="750px" class="mt-6" outlined>
                     <v-list-item>
                         <v-list-item-content>
-                            <v-list-item-title class="headline">{{item.name}}</v-list-item-title>
+                            <v-list-item-title class="headline">{{item.title}}</v-list-item-title>
                              <v-list-item-subtitle>Дата публикаций:{{item.date_add}}</v-list-item-subtitle>
                         </v-list-item-content>
                         <div>
-                            <v-btn @click="editNews({item})">Изменить</v-btn>
+                            <v-btn >Перейти</v-btn>
                         </div>
                     </v-list-item>
-
-                    <v-img class="ma-12"
-                        src="{{item.img}}"
-                    ></v-img>
-
-                    <v-card-text>{{item.text}}</v-card-text>
-
-
                 </v-card>
 
                 {% endfor %}
@@ -88,7 +80,7 @@
                 </v-dialog>
             </div>
         <div>
-        
+
         </div>
     </v-container>
     </div>

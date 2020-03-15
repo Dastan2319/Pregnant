@@ -8,11 +8,6 @@ class News(models.Model):
     img = f.TextField()
     tags = f.TextField()
     date_add = f.DateTimeField(auto_now_add=True)
-# Topic это для форума название темы обсуждения
-class Topic(models.Model):
-    title = f.TextField(null=False)
-    text = f.TextField(null=False)
-    date_add = f.DateTimeField(auto_now_add=True)
 
 class User(models.Model):
     name = f.CharField(max_length=100,null=False)
@@ -22,6 +17,13 @@ class User(models.Model):
 
     def __str__(self):
         return self.name
+
+# Topic это для форума название темы обсуждения
+class Topic(models.Model):
+    title = f.TextField(null=False)
+    text = f.TextField(null=False)
+    date_add = f.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class roles(models.Model):
     name = f.CharField(max_length=100)
@@ -40,6 +42,7 @@ class user_roles(models.Model):
 class Comments(models.Model):
     user = models.ForeignKey(User,on_delete = models.CASCADE)
     topic=models.ForeignKey(Topic,on_delete = models.CASCADE)
+    text = f.TextField()
 
 class Preparation(models.Model):
     title = f.CharField(max_length=100)

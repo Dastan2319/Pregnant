@@ -2,8 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.views.generic import ListView
-from .foms import NewsForm , registerForm
-from .models import News ,User
+from .foms import NewsForm , registerForm,topicForm
+from .models import News ,User, Topic
 
 # Create your views here.
 
@@ -49,6 +49,41 @@ def register(request):
                 return render(request,'register.html',context=dict(form=form))
         else:
             return render(request, 'register.html', context=dict(form=form))
+
+def forum(request):
+    if request.method == "GET":
+        temp = Topic.objects.all()
+        topic = []
+        for item in temp:
+            topic.append(
+                {"title": item.title, "text": item.text, "date_add": item.date_add})
+        return render(request,'forum.html',context=dict(forum=topicForm,topic=topic))
+    elif request.method == "POST":
+        form=topicForm(request.POST)
+        if form.is_valid():
+            findedTopic=Topic.objects.all()
+
+            addTopic=True
+            for top in findedTopic:
+                if(top.replace(' ','').lower()==form.cleaned_data['name']):
+                    addTopic = False
+
+            if addTopic == True:
+                topic = Topic(name=form.cleaned_data['name'],text=form.cleaned_data['text'],user=1)
+                # topic.save()
+                return redirect(topic,topic.id)
+            else:
+                form.add_error('name', "Такая тему уже существует")
+                return render(request, 'forum.html', context=dict(form=form))
+        else:
+            return render(request, 'forum.html', context=dict(form=form))
+
+
+def topic(request):
+    if request.method == 'GET':
+        return render(request,'topic.html')
+
+
 
 
 # def showNews(request, id: int):
