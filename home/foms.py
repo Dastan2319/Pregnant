@@ -14,4 +14,7 @@ class registerForm(f.Form):
 
 class topicForm(f.Form):
     title = f.CharField(required=True)
-    text = f.CharField(required=True)
+    text = f.CharField(required=True,widget=f.Textarea)
+
+class commentForm(f.Form):
+    comment = f.CharField(required=True)

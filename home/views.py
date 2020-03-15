@@ -2,8 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.views.generic import ListView
-from .foms import NewsForm , registerForm,topicForm
-from .models import News ,User, Topic
+from .foms import NewsForm , registerForm,topicForm , commentForm
+from .models import News ,User, Topic ,Comments
 
 # Create your views here.
 
@@ -57,7 +57,7 @@ def forum(request):
         for item in temp:
             topic.append(
                 {"title": item.title, "text": item.text, "date_add": item.date_add})
-        return render(request,'forum.html',context=dict(forum=topicForm,topic=topic))
+        return render(request,'forum.html',context=dict(forum=topicForm,topic=topic,dialog='false'))
     elif request.method == "POST":
         form=topicForm(request.POST)
         if form.is_valid():
@@ -65,24 +65,48 @@ def forum(request):
 
             addTopic=True
             for top in findedTopic:
-                if(top.replace(' ','').lower()==form.cleaned_data['name']):
+                if top.title.replace(' ','').lower() == form.cleaned_data['title'].replace(' ','').lower():
                     addTopic = False
 
             if addTopic == True:
-                topic = Topic(name=form.cleaned_data['name'],text=form.cleaned_data['text'],user=1)
-                # topic.save()
+                topic = Topic(name=form.cleaned_data['title'],text=form.cleaned_data['text'],user=1)
+                topic.save()
                 return redirect(topic,topic.id)
             else:
-                form.add_error('name', "Такая тему уже существует")
-                return render(request, 'forum.html', context=dict(form=form))
+                temp = Topic.objects.all()
+                topic = []
+                for item in temp:
+                    topic.append(
+                        {"title": item.title, "text": item.text, "date_add": item.date_add})
+
+                form.add_error('title', "Такая тему уже существует")
+                return render(request, 'forum.html', context=dict(forum=form,topic=topic,dialog='true'))
         else:
-            return render(request, 'forum.html', context=dict(form=form))
+            temp = Topic.objects.all()
+            topic = []
+            for item in temp:
+                topic.append(
+                    {"title": item.title, "text": item.text, "date_add": item.date_add})
+            return render(request, 'forum.html', context=dict(forum=form,topic=topic,dialog='true'))
 
 
-def topic(request):
+def topic(request,id):
+    topic = Topic.objects.get(id=id)
+    comments = Comments.objects.filter(topic=id)
+    dictComment = []
+    for comm in comments:
+        dictComment.append({'name': comm.user.name, 'comment': comm.text, "date_add": comm.date_add})
+
     if request.method == 'GET':
-        return render(request,'topic.html')
-
+        return render(request,'topic.html',context=dict(topic=topic,comment=dictComment,form=commentForm))
+    elif request.method == 'POST':
+        form = commentForm(request.POST)
+        if form.is_valid():
+            comment=Comments(user=1,topic=id,text=form.cleaned_data['text'])
+            comment.save()
+            return render(request, 'topic.html', context=dict(topic=topic, comment=dictComment,form=commentForm))
+        else:
+            return render(request, 'topic.html', context=dict(topic=topic, comment=dictComment,form=form))
 
 
 

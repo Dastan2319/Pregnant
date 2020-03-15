@@ -4,6 +4,7 @@ from home import views
 urlpatterns = [
     path('', views.index),
     path('reg',views.register),
-    path('forum', views.forum)
+    path('forum', views.forum),
+    path('topic/<int:id>',views.topic)
 
 ]

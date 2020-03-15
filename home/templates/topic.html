@@ -38,55 +38,35 @@
                </v-card>
 
             <div>
-                {% for item in topic %}
-                <v-card max-width="750px" class="mt-6" outlined>
+                <v-card width="900px" class="mt-6" outlined>
                     <v-list-item>
                         <v-list-item-content>
-                            <v-list-item-title class="headline">{{item.title}}</v-list-item-title>
-                             <v-list-item-subtitle>Дата публикаций:{{item.date_add}}</v-list-item-subtitle>
+                            <v-list-item-title class="headline">{{topic.title}}</v-list-item-title>
+                            <v-list-item-subtitle>Дата публикаций:{{topic.date_add}}</v-list-item-subtitle>
+                            <div class="mt-4 mb-2">Описание:{{topic.text}}</div>
                         </v-list-item-content>
-                        <div>
-                            <v-btn >Перейти</v-btn>
-                        </div>
                     </v-list-item>
                 </v-card>
-
+                {% for item in comment %}
+                <v-card>
+                    <v-list-item>
+                        <v-list-item-content class="d-flex">
+                            <v-list-item-title >Логин:{{item.name}} <span class="dateAdd">Дата добавления:{{item.date_add}}</span></v-list-item-title>
+                            <div class="text--primary mt-2 mb-4">Комментарии:<span class="comment">{{item.comment}}</span></div>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-card>
                 {% endfor %}
+                <div>
+                    <form method="POST">
+                         {% csrf_token %}
+                        <label>Комментарии:{{form.comment}}</label>
+                        <input type="submit" />
+                    </form>
+                </div>
             </div>
 
-            <div class="mt-6 ml-12">
-                <v-btn @click="dialog = true">Создать тему</v-btn>
 
-                <v-dialog v-model="dialog" max-width="500px" >
-                       {% if forum.errors %}
-                            {% for field in forum %}
-                                {% for error in field.errors %}
-                                    <div class="errors">
-                                         <v-alert type="error" dismissible>
-                                            {{error}}
-                                        </v-alert>
-                                    </div>
-                                {% endfor %}
-                            {% endfor %}
-                        {% endif %}
-
-                        <v-card class="pa-6">
-                            <v-card>
-                                <v-card-title class="headline">Добавление темы</v-card-title>
-                                <hr>
-                                    <form method="POST" class="d-flex flex-column">
-                                        {% csrf_token %}
-                                        <label>Название:{{forum.title}} </label>
-                                        <label>Описание:{{forum.text}}</label>
-                                        <input type="submit" />
-                                    </form>
-                            </v-card>
-                        </v-card>
-                </v-dialog>
-            </div>
-        <div>
-
-        </div>
     </v-container>
     </div>
     </v-app>
@@ -99,9 +79,6 @@
     new Vue({
       el: '#app',
       vuetify: new Vuetify(),
-      mounted(){
-        this.dialog={{dialog}}
-      },
       data()
       {
             return{
@@ -132,6 +109,14 @@
 
 
 <style>
+.comment
+{
+    font-size:14px;
+}
+.dateAdd
+{
+    font-size:12px;
+}
 .errors
 {
     position: absolute;

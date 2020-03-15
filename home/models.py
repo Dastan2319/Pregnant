@@ -42,6 +42,7 @@ class user_roles(models.Model):
 class Comments(models.Model):
     user = models.ForeignKey(User,on_delete = models.CASCADE)
     topic=models.ForeignKey(Topic,on_delete = models.CASCADE)
+    date_add = f.DateTimeField(auto_now_add=True)
     text = f.TextField()
 
 class Preparation(models.Model):
