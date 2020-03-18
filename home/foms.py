@@ -18,3 +18,7 @@ class topicForm(f.Form):
 
 class commentForm(f.Form):
     comment = f.CharField(required=True)
+
+class loginForm(f.Form):
+    login = f.CharField(required=True)
+    password = f.CharField(required=True)

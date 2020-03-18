@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import fields as f
 # Create your models here.
+from django.contrib.auth.models import User
 
 class News(models.Model):
     name = f.CharField(max_length=100 ,null=False)
@@ -9,14 +10,14 @@ class News(models.Model):
     tags = f.TextField()
     date_add = f.DateTimeField(auto_now_add=True)
 
-class User(models.Model):
-    name = f.CharField(max_length=100,null=False)
-    password = f.CharField(max_length=20,null=False)
-    isActive = True
-    date_add = f.DateTimeField(auto_now_add=True)
+# class User(models.Model):
+#     name = f.CharField(max_length=100,null=False)
+#     password = f.CharField(max_length=20,null=False)
+#     isActive = True
+#     date_add = f.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
 # Topic это для форума название темы обсуждения
 class Topic(models.Model):
@@ -31,13 +32,13 @@ class roles(models.Model):
 
     def __str__(self):
         return str(self.id)+' '+self.name
-
-class user_roles(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    roles = models.ForeignKey(roles, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return str(self.user.name) + ' имеет права ' + self.roles.name
+#
+# class user_roles(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     roles = models.ForeignKey(roles, on_delete=models.CASCADE)
+#
+#     def __str__(self):
+#         return str(self.user.username) + ' имеет права ' + self.roles.name
 
 class Comments(models.Model):
     user = models.ForeignKey(User,on_delete = models.CASCADE)

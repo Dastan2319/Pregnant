@@ -7,15 +7,19 @@
 </head>
 <body>
   <div id="app">
-      <v-toolbar class="toolbar">
+         <v-toolbar class="toolbar">
             <img class="mainIcon" src="https://img.favpng.com/12/9/16/pregnancy-childbirth-infant-woman-surgery-png-favpng-bsQdbVv3sRSCkjaExuTxKSVDA.jpg" width="30px" height="30px" />
 
             <v-toolbar-title class="toolbarTitle">Pregnant</v-toolbar-title>
             <v-toolbar-items class="subtitletoolber">borned to life</v-toolbar-items>
             <v-spacer></v-spacer>
-            <div class="toolberBtns">
-                <v-btn v-model="enter">Войти</v-btn>
+            <div class="toolberBtns" v-if="isLogged==false">
+                <v-btn href="/home/login">Войти</v-btn>
                 <v-btn  href="/home/reg">Регестрация</v-btn>
+            </div>
+            <div v-if="isLogged==true" class="toolberBtns" >
+                <span >Здраствуйте {{username}}</span>
+                <a href="/home/logout">Выйти</a>
             </div>
         </v-toolbar>
     <v-app>
@@ -28,8 +32,9 @@
                         <v-list-item
                             v-for="(item, i) in menu"
                             :key="i"
+                            :href="item.url"
                             >
-                            <v-list-item-content href="/home/item.url">
+                            <v-list-item-content >
                             <v-list-item-title v-text="item.name"></v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
@@ -46,7 +51,7 @@
                              <v-list-item-subtitle>Дата публикаций:{{item.date_add}}</v-list-item-subtitle>
                         </v-list-item-content>
                         <div>
-                            <v-btn >Перейти</v-btn>
+                            <v-btn href="topic/{{item.id}}">Перейти</v-btn>
                         </div>
                     </v-list-item>
                 </v-card>
@@ -101,6 +106,9 @@
       vuetify: new Vuetify(),
       mounted(){
         this.dialog={{dialog}}
+        this.isLogged={{islogged}};
+        this.username='{{username}}';
+        this.isAdmin={{isAdmin}}
       },
       data()
       {
@@ -113,7 +121,10 @@
                 news_img:"",
                 news_tag:"",
                 enter:false,
-
+                topic:[],
+                isLogged:false,
+                isAdmin:false,
+                username:"",
             }
       },
       methods:{
