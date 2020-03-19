@@ -7,39 +7,57 @@
 </head>
 <body>
   <div id="app">
-     {% include 'header.html' %}
+      {% include 'header.html' %}
     <v-app>
 
         <div >
             <v-container class="d-flex">
-             {% include 'menu.html' %}
+              {% include 'menu.html' %}
             <div>
-                {% for item in news %}
-                <v-card max-width="750px" class="mt-6">
+                <v-card width="600px" class="mt-6" outlined>
                     <v-list-item>
                         <v-list-item-content>
-                            <v-list-item-title class="headline">{{item.name}}</v-list-item-title>
-                             <v-list-item-subtitle>Дата публикаций:{{item.date_add}}</v-list-item-subtitle>
+                            <v-list-item-title class="headline">{{prepar.name}}</v-list-item-title>
+                            <div class="mt-4 mb-2">Описание:{{prepar.description}}</div>
                         </v-list-item-content>
-                        <div v-if="isAdmin == true">
-                            <v-btn @click="editNews({item})">Изменить</v-btn>
-                        </div>
                     </v-list-item>
-
-                    <v-img class="ma-12"
-                        src="{{item.img}}"
-                    ></v-img>
-
-                    <v-card-text>{{item.text}}</v-card-text>
-
-
                 </v-card>
+                <table class="mt-4">
+                    <thead>
+                        <tr>
+                            <td class="pa-6">Название</td>
+                            <td class="pa-6">Количество</td>
+                            <td class="pa-6">Рекомендация</td>
+                            <td class="pa-6">Пометить</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in list %}
+                        <tr >
+                            <td class="pa-6">
+                                {{item.title}}
+                            </td>
+                            <td class="pa-6">
+                                {{item.quantity}}
+                            </td>
+                            <td class="pa-6">
+                                {{item.recommendationAddress}}
+                            </td>
+                            <td class="pa-6">
+                                <v-switch ></v-switch>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
 
-                {% endfor %}
+
+
+                </table>
+
+
             </div>
-
-            <div class="mt-6 ml-12" v-if="isAdmin == true">
-                <v-btn  @click="dialog = true">Создать новости</v-btn>
+            <div class="mt-6 ml-6" v-if="isAdmin==true">
+                <v-btn  @click="dialog = true">Добавить задачу</v-btn>
 
                 <v-dialog v-model="dialog" max-width="500px" >
                         <v-card class="pa-6">
@@ -49,23 +67,18 @@
                                 <form method="POST" class="d-flex flex-column">
                                     {% csrf_token %}
                                     <label>Название</label>
-                                    <input class="newsFormInput" v-model="news_name" class="label" type="text" name="name" />
-                                    <label>Текст</label>
-                                    <textarea v-model="news_text" class="newsFormInput" name="text" ></textarea>
-                                    <label>URL фото</label>
-                                    <input  v-model="news_img" class="newsFormInput" type="text" name="img" />
-                                    <label>Теги (через пробел)</label>
-                                    <input v-model="news_tag" class="newsFormInput" type="text" name="tags" />
-
+                                    {{form.title}}
+                                    <label>Количество</label>
+                                    {{form.quantity}}
+                                    <label>Рекомендация</label>
+                                    {{form.recommendationAddress}}
                                     <input type="submit" />
                                 </form>
                             </v-card>
                         </v-card>
                 </v-dialog>
             </div>
-        <div>
-        
-        </div>
+
     </v-container>
     </div>
     </v-app>
@@ -78,7 +91,8 @@
     new Vue({
       el: '#app',
       vuetify: new Vuetify(),
-      mounted(){
+      mounted()
+      {
           this.isLogged={{islogged}};
           this.username='{{username}}';
           this.isAdmin={{isAdmin}}
@@ -94,9 +108,10 @@
                 news_img:"",
                 news_tag:"",
                 enter:false,
-                isLogged:false,
                 username:'',
+                isLogged:false,
                 isAdmin:false,
+
             }
       },
       methods:{
@@ -115,11 +130,24 @@
 
 
 <style>
+td
+{
+    border:1px solid black;
+}
+.comment
+{
+    font-size:14px;
+}
+.dateAdd
+{
+    font-size:12px;
+}
 .errors
 {
     position: absolute;
-    top: -60px;
-    right: 10px;
+    top: 0;
+    width: 500px;
+    right: 0;
 }
 .toolberBtns
 {

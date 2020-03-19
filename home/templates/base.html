@@ -7,46 +7,17 @@
 </head>
 <body>
   <div id="app">
-      {% include 'header.html' %}
+     {% include 'header.html' %}
     <v-app>
 
         <div >
             <v-container class="d-flex">
-              {% include 'menu.html' %}
-            <div>
-                <v-card width="900px" class="mt-6" outlined>
-                    <v-list-item>
-                        <v-list-item-content>
-                            <v-list-item-title class="headline">{{topic.title}}</v-list-item-title>
-                            <v-list-item-subtitle>Дата публикаций:{{topic.date_add}}</v-list-item-subtitle>
-                            <div class="mt-4 mb-2">Описание:{{topic.text}}</div>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-card>
-                <div class="commDiv mb-2 mt-2">
-                {% for item in comment %}
-                <v-card height="67px" class="mt-1 ">
-                    <v-list-item>
-                        <v-list-item-content class="d-flex">
-                            <v-list-item-title >Логин:{{item.name}} <span class="dateAdd">Дата добавления:{{item.date_add}}</span></v-list-item-title>
-                            <div class="text--primary mt-2 mb-4">Комментарии:<span class="comment">{{item.comment}}</span></div>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-card>
-                {% endfor %}
-                </div>
-                <div class="elevation-2 pa-4">
-                    <form method="POST" v-if="isLogged==true" class="d-flex align-center justify-space-between">
-                         {% csrf_token %}
-                        <label>Комментарии:<span class="pa-2">{{form.text}}</span></label>
-                        <v-btn type="submit" >Отправить</v-btn>
-                    </form>
-                </div>
-            </div>
+             {% include 'menu.html' %}
+                {% block content %}
 
-
-    </v-container>
-    </div>
+                {% endblock content %}
+            </v-container>
+        </div>
     </v-app>
   </div>
 </body>
@@ -57,8 +28,7 @@
     new Vue({
       el: '#app',
       vuetify: new Vuetify(),
-      mounted()
-      {
+      mounted(){
           this.isLogged={{islogged}};
           this.username='{{username}}';
           this.isAdmin={{isAdmin}}
@@ -74,10 +44,10 @@
                 news_img:"",
                 news_tag:"",
                 enter:false,
-                username:'',
                 isLogged:false,
+                username:'',
+                logformopen:false,
                 isAdmin:false,
-
             }
       },
       methods:{
@@ -96,33 +66,11 @@
 
 
 <style>
-.commDiv
-{
-    height:300px;
-    overflow:auto;
-    border:1px solid #C0C0C0;
-}
-.inputForm
-{
-    border-radius:5px;
-    width:500px;
-    border:1px solid #C0C0C0;
-    padding:3px;
-}
-.comment
-{
-    font-size:14px;
-}
-.dateAdd
-{
-    font-size:12px;
-}
 .errors
 {
     position: absolute;
-    top: 0;
-    width: 500px;
-    right: 0;
+    top: -60px;
+    right: 10px;
 }
 .toolberBtns
 {

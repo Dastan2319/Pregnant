@@ -42,19 +42,26 @@ class roles(models.Model):
 
 class Comments(models.Model):
     user = models.ForeignKey(User,on_delete = models.CASCADE)
-    topic=models.ForeignKey(Topic,on_delete = models.CASCADE)
+    topic = models.ForeignKey(Topic,on_delete = models.CASCADE)
     date_add = f.DateTimeField(auto_now_add=True)
     text = f.TextField()
 
-class Preparation(models.Model):
-    title = f.CharField(max_length=100)
-    description = f.TextField()
 
 class NeededItems(models.Model):
-    prepartion = models.ForeignKey(Preparation , on_delete=models.CASCADE)
-    item = f.CharField(max_length=100)
+    title = f.CharField(max_length=100)
     quantity = f.IntegerField()
-    recommendationAddress = f.CharField(max_length=100) #типо рекламы
+    recommendationAddress = f.CharField(max_length=100)  # типо рекламы
+
+
+class Preparation(models.Model):
+    name = f.CharField(max_length=100)
+    description = f.TextField()
+
+
+
+class PreparationList(models.Model):
+    prepartion = models.ForeignKey(Preparation, on_delete=models.CASCADE)
+    neededitems = models.ForeignKey(NeededItems, on_delete=models.CASCADE)
 
 class MaternityHospital(models.Model):
     name = f.CharField(max_length=50)

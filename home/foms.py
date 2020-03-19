@@ -17,8 +17,17 @@ class topicForm(f.Form):
     text = f.CharField(required=True,widget=f.Textarea)
 
 class commentForm(f.Form):
-    comment = f.CharField(required=True)
+    text = f.CharField(required=True, widget= f.TextInput(attrs={'class':'inputForm'}))
 
 class loginForm(f.Form):
     login = f.CharField(required=True)
     password = f.CharField(required=True)
+
+class NeedItemsForm(f.Form):
+    title = f.CharField(max_length=100)
+    quantity = f.IntegerField()
+    recommendationAddress = f.CharField(max_length=100)
+
+class PreparationForm(f.Form):
+    name = f.CharField(max_length=100)
+    description = f.CharField()

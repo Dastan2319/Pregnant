@@ -2,8 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.views.generic import ListView
-from .foms import NewsForm, registerForm, topicForm, commentForm, loginForm
-from .models import News, Topic, Comments
+from .foms import NewsForm, registerForm, topicForm, commentForm, loginForm, NeedItemsForm,PreparationForm
+from .models import News, Topic, Comments, Preparation, NeededItems ,PreparationList
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
@@ -88,7 +88,8 @@ def forum(request):
                 {"id": item.id, "title": item.title, "text": item.text, "date_add": item.date_add})
 
         return render(request, 'forum.html',
-                      context=dict(forum=topicForm, topic=topic, dialog='false', isAdmin=isAdmin, islogged=isLogged,username=username))
+                      context=dict(forum=topicForm, topic=topic, dialog='false', isAdmin=isAdmin, islogged=isLogged,
+                                   username=username))
     elif request.method == "POST":
         if request.user.has_perm('home.add_topic'):
             form = topicForm(request.POST)
@@ -101,9 +102,10 @@ def forum(request):
                         addTopic = False
 
                 if addTopic == True:
-                    newtopic = Topic(title=form.cleaned_data['title'], text=form.cleaned_data['text'], user=request.user)
+                    newtopic = Topic(title=form.cleaned_data['title'], text=form.cleaned_data['text'],
+                                     user=request.user)
                     newtopic.save()
-                    return redirect('/home/topic/'+str(newtopic.id))
+                    return redirect('/home/topic/' + str(newtopic.id))
                 else:
                     temp = Topic.objects.all()
                     topic = []
@@ -114,7 +116,7 @@ def forum(request):
                     form.add_error('title', "Такая тему уже существует")
                     return render(request, 'forum.html',
                                   context=dict(forum=form, topic=topic, dialog='true', isAdmin=isAdmin,
-                                               islogged=isLogged,username=username))
+                                               islogged=isLogged, username=username))
             else:
                 temp = Topic.objects.all()
                 topic = []
@@ -122,28 +124,103 @@ def forum(request):
                     topic.append(
                         {"id": item.id, "title": item.title, "text": item.text, "date_add": item.date_add})
                 return render(request, 'forum.html',
-                              context=dict(forum=form, topic=topic, dialog='true', isAdmin=isAdmin, islogged=isLogged,username=username))
+                              context=dict(forum=form, topic=topic, dialog='true', isAdmin=isAdmin, islogged=isLogged,
+                                           username=username))
         else:
             return redirect(forum)
 
 
 def topic(request, id):
+    isAdmin = 'false'
+    isLogged = 'false'
+    username = ''
+    if request.user.is_authenticated:
+        if request.user.has_perms('home.add_topic', 'home.change_topic'):
+            isAdmin = 'true'
+        isLogged = 'true'
+        username = request.user.username
+
     topic = Topic.objects.get(id=id)
     comments = Comments.objects.filter(topic=id)
     dictComment = []
     for comm in comments:
-        dictComment.append({'name': comm.user.name, 'comment': comm.text, "date_add": comm.date_add})
+        dictComment.append({'name': comm.user.username, 'comment': comm.text, "date_add": comm.date_add})
 
     if request.method == 'GET':
-        return render(request, 'topic.html', context=dict(topic=topic, comment=dictComment, form=commentForm))
+        return render(request, 'topic.html',
+                      context=dict(topic=topic, comment=dictComment, form=commentForm, isAdmin=isAdmin,
+                                   islogged=isLogged, username=username))
     elif request.method == 'POST':
-        form = commentForm(request.POST)
-        if form.is_valid():
-            comment = Comments(user=1, topic=id, text=form.cleaned_data['text'])
-            comment.save()
-            return render(request, 'topic.html', context=dict(topic=topic, comment=dictComment, form=commentForm))
-        else:
-            return render(request, 'topic.html', context=dict(topic=topic, comment=dictComment, form=form))
+        if request.user.has_perm('home.add_comments'):
+            form = commentForm(request.POST)
+            if form.is_valid():
+                this_topic = Topic.objects.get(id=id)
+                comment = Comments(user=request.user, topic=this_topic, text=form.cleaned_data['text'])
+                comment.save()
+                return redirect(topic,id)
+            else:
+                return render(request, 'topic.html',
+                              context=dict(topic=topic, comment=dictComment, form=form, isAdmin=isAdmin,
+                                           islogged=isLogged, username=username))
+
+
+def preparation(request):
+    isAdmin = 'false'
+    isLogged = 'false'
+    username = ''
+    if request.user.is_authenticated:
+        if request.user.has_perms('home.add_preparation', 'home.change_preparation'):
+            isAdmin = 'true'
+        isLogged = 'true'
+        username = request.user.username
+    needItems = Preparation.objects.all()
+    if request.method == 'GET':
+
+        return render(request,'preparation.html',
+                      context=dict(needItems=needItems,needForm=PreparationForm, isAdmin=isAdmin, islogged=isLogged, username=username))
+    elif request.method == 'POST':
+        if request.user.has_perm('add_preparation'):
+            form=PreparationForm(request.POST)
+            if form.is_valid():
+                need=NeededItems(title=form.cleaned_data['title'],quantity=int(form.cleaned_data['quantity'] ), recommendationAddress=form.cleaned_data['recommendationAddress'])
+                need.save()
+                return redirect(needitems,need.id)
+            else:
+                return render(request, 'preparation.html',
+                              context=dict(needItems=needItems, needForm=form, isAdmin=isAdmin,
+                                           islogged=isLogged, username=username))
+
+def needitems(request,id):
+    isAdmin = 'false'
+    isLogged = 'false'
+    username = ''
+    if request.user.is_authenticated:
+        if request.user.has_perms('home.add_preparation', 'home.change_preparation'):
+            isAdmin = 'true'
+        isLogged = 'true'
+        username = request.user.username
+    prepar = Preparation.objects.get(id=id)
+    list = PreparationList.objects.filter(prepartion=prepar)
+    thisItems = []
+    for i in list:
+        thisItems.append({'title': i.neededitems.title, 'quantity': i.neededitems.quantity,
+                          'recommendationAddress': i.neededitems.recommendationAddress})
+
+    if request.method == 'GET':
+        return render(request,'needitems.html',context=dict(list=thisItems,prepar=prepar,form=NeedItemsForm, isAdmin=isAdmin, islogged=isLogged, username=username))
+    if request.method == 'POST':
+        if request.user.has_perm('home.add_preparation'):
+            form=NeedItemsForm(request.POST)
+            if form.is_valid():
+                newNeed=NeededItems(title=form.cleaned_data['title'],quantity=form.cleaned_data['quantity'],recommendationAddress=form.cleaned_data['recommendationAddress'])
+                newNeed.save()
+                newList=PreparationList(prepartion=prepar,neededitems=newNeed)
+                newList.save()
+                return redirect(needitems,id)
+            else:
+                return render(request, 'needitems.html',
+                              context=dict(list=thisItems, prepar=prepar, form=form, isAdmin=isAdmin,
+                                           islogged=isLogged, username=username))
 
 # def showNews(request, id: int):
 #     addNews = News.objects.get(id=id)

@@ -7,44 +7,16 @@
 </head>
 <body>
   <div id="app">
-         <v-toolbar class="toolbar">
-            <img class="mainIcon" src="https://img.favpng.com/12/9/16/pregnancy-childbirth-infant-woman-surgery-png-favpng-bsQdbVv3sRSCkjaExuTxKSVDA.jpg" width="30px" height="30px" />
-
-            <v-toolbar-title class="toolbarTitle">Pregnant</v-toolbar-title>
-            <v-toolbar-items class="subtitletoolber">borned to life</v-toolbar-items>
-            <v-spacer></v-spacer>
-            <div class="toolberBtns" v-if="isLogged==false">
-                <v-btn href="/home/login">Войти</v-btn>
-                <v-btn  href="/home/reg">Регестрация</v-btn>
-            </div>
-            <div v-if="isLogged==true" class="toolberBtns" >
-                <span >Здраствуйте {{username}}</span>
-                <a href="/home/logout">Выйти</a>
-            </div>
-        </v-toolbar>
+    {% include 'header.html' %}
     <v-app>
 
         <div >
             <v-container class="d-flex">
-             <v-card class=" mt-6 menu mr-6">
-                <v-list>
-                    <v-list-item-group v-model="model" >
-                        <v-list-item
-                            v-for="(item, i) in menu"
-                            :key="i"
-                            :href="item.url"
-                            >
-                            <v-list-item-content >
-                            <v-list-item-title v-text="item.name"></v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                        </v-list-item-group>
-                    </v-list>
-               </v-card>
+              {% include 'menu.html' %}
 
-            <div>
+            <div class="mt-6">
                 {% for item in topic %}
-                <v-card max-width="750px" class="mt-6" outlined>
+                <v-card max-width="750px" class="mb-2" outlined>
                     <v-list-item>
                         <v-list-item-content>
                             <v-list-item-title class="headline">{{item.title}}</v-list-item-title>

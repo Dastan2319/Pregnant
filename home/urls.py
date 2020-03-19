@@ -6,6 +6,8 @@ urlpatterns = [
     path('index', views.index),
     path('reg',views.register),
     path('forum', views.forum),
+    path('prep', views.preparation),
+    path('needitems/<int:id>',views.needitems),
     path('topic/<int:id>',views.topic),
     path('logout',views_user.logout_view),
     path('login',views_user.login_view)
