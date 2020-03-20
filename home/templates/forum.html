@@ -31,7 +31,7 @@
                 {% endfor %}
             </div>
 
-            <div class="mt-6 ml-12">
+            <div class="mt-6 ml-12" v-if="isAdmin">
                 <v-btn @click="dialog = true">Создать тему</v-btn>
 
                 <v-dialog v-model="dialog" max-width="500px" >
