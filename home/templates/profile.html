@@ -7,63 +7,43 @@
 </head>
 <body>
   <div id="app">
-    {% include 'header.html' %}
+      {% include 'header.html' %}
     <v-app>
 
         <div >
             <v-container class="d-flex">
               {% include 'menu.html' %}
-
-            <div class="mt-6">
-                {% for item in topic %}
-                <v-card max-width="750px" class="mb-2" outlined>
-                    <v-list-item>
-                        <v-list-item-content>
-                            <v-list-item-title class="headline">{{item.title}}</v-list-item-title>
-                             <v-list-item-subtitle>Дата публикаций:{{item.date_add}}</v-list-item-subtitle>
-                        </v-list-item-content>
-                        <div>
-                            <v-btn href="topic/{{item.id}}">Перейти</v-btn>
-                        </div>
-                    </v-list-item>
-                </v-card>
-
-                {% endfor %}
-            </div>
-
-            <div class="mt-6 ml-12" v-if="isAdmin">
-                <v-btn @click="dialog = true">Создать тему</v-btn>
-
-                <v-dialog v-model="dialog" max-width="500px" >
-                       {% if forum.errors %}
-                            {% for field in forum %}
+            <div>
+                <div class="commDiv mb-2 mt-4">
+                    {% if form.errors %}
+                        {% if isProfile == 'true' %}
+                            {% for field in form %}
                                 {% for error in field.errors %}
                                     <div class="errors">
-                                         <v-alert type="error" dismissible>
-                                            {{error}}
+                                         <v-alert type="error" style="width:350px;" dismissible>
+                                           {{field.name}} {{error}}
                                         </v-alert>
                                     </div>
                                 {% endfor %}
                             {% endfor %}
-                        {% endif %}
-
-                        <v-card class="pa-6">
-                            <v-card>
-                                <v-card-title class="headline">Добавление темы</v-card-title>
-                                <hr>
-                                    <form method="POST" class="d-flex flex-column">
-                                        {% csrf_token %}
-                                        <label>Название:{{forum.title}} </label>
-                                        <label>Описание:{{forum.text}}</label>
-                                        <input type="submit" />
-                                    </form>
-                            </v-card>
-                        </v-card>
-                </v-dialog>
+                         {% endif %}
+                    {% endif %}
+                    <form method="POST" v-if="isProfile==true" class="d-flex flex-column pa-4">
+                        {% csrf_token %}
+                        <label class="pa-4">Пароль:{{form.password}}</label>
+                        <label class="pa-4">Имя:{{form.first_name}}</label>
+                        <label class="pa-4">Фамилия:{{form.last_name}}</label>
+                        <label class="pa-4">Почта:{{form.email}}</label>
+                        <v-btn type="submit">Сохранить</v-btn>
+                    </form>
+                    <form v-if="isProfile==false" class="d-flex flex-column pa-4">
+                        <label class="pa-4">Имя:{{form.first_name}}</label>
+                        <label class="pa-4">Фамилия:{{form.last_name}}</label>
+                        <label class="pa-4">Почта:{{form.email}}</label>
+                    </form>
+                </div>
             </div>
-        <div>
 
-        </div>
     </v-container>
     </div>
     </v-app>
@@ -76,11 +56,13 @@
     new Vue({
       el: '#app',
       vuetify: new Vuetify(),
-      mounted(){
-        this.dialog={{dialog}}
-        this.isLogged={{islogged}};
-        this.username='{{username}}';
-        this.isAdmin={{isAdmin}}
+      mounted()
+      {
+          this.isLogged={{isLogged}};
+          this.username='{{username}}';
+          this.isAdmin={{isAdmin}};
+          this.isProfile={{isProfile}};
+          console.log(this.username)
       },
       data()
       {
@@ -93,10 +75,10 @@
                 news_img:"",
                 news_tag:"",
                 enter:false,
-                topic:[],
+                username:'',
                 isLogged:false,
                 isAdmin:false,
-                username:"",
+                isProfile:false,
             }
       },
       methods:{
@@ -115,6 +97,29 @@
 
 
 <style>
+.commDiv
+{
+    height:300px;
+    overflow:auto;
+    border:1px solid #C0C0C0;
+}
+.hospitals
+{
+    width:600px;
+}
+
+td
+{
+    border:1px solid black;
+}
+.comment
+{
+    font-size:14px;
+}
+.dateAdd
+{
+    font-size:12px;
+}
 .errors
 {
     position: absolute;
@@ -146,7 +151,7 @@
     border:1px solid black;
     border-radius:5px;
 }
-    .menu{
+  .menu{
         height:220px;
     }
     .NewsText{

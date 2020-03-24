@@ -7,36 +7,37 @@
 </head>
 <body>
   <div id="app">
-    {% include 'header.html' %}
+      {% include 'header.html' %}
     <v-app>
 
         <div >
             <v-container class="d-flex">
               {% include 'menu.html' %}
-
-            <div class="mt-6">
-                {% for item in topic %}
-                <v-card max-width="750px" class="mb-2" outlined>
+            <div class="hospitals">
+                {% for item in hospitals %}
+                <v-card width="600px" class="mt-6" outlined>
                     <v-list-item>
                         <v-list-item-content>
-                            <v-list-item-title class="headline">{{item.title}}</v-list-item-title>
-                             <v-list-item-subtitle>Дата публикаций:{{item.date_add}}</v-list-item-subtitle>
+                            <v-list-item-title class="headline">{{item.name}}</v-list-item-title>
                         </v-list-item-content>
                         <div>
-                            <v-btn href="topic/{{item.id}}">Перейти</v-btn>
+                            <v-btn href="/home/hospital/{{item.id}}">Перейти</v-btn>
                         </div>
                     </v-list-item>
                 </v-card>
-
                 {% endfor %}
-            </div>
+                <div class="mt-4">
 
-            <div class="mt-6 ml-12" v-if="isAdmin">
-                <v-btn @click="dialog = true">Создать тему</v-btn>
+                </div>
+
+
+            </div>
+            <div class="mt-6 ml-6" v-if="isAdmin==true">
+                <v-btn  @click="dialog = true">Добавить больницу</v-btn>
 
                 <v-dialog v-model="dialog" max-width="500px" >
-                       {% if forum.errors %}
-                            {% for field in forum %}
+                        {% if form.errors %}
+                            {% for field in form %}
                                 {% for error in field.errors %}
                                     <div class="errors">
                                          <v-alert type="error" dismissible>
@@ -46,24 +47,21 @@
                                 {% endfor %}
                             {% endfor %}
                         {% endif %}
-
                         <v-card class="pa-6">
                             <v-card>
-                                <v-card-title class="headline">Добавление темы</v-card-title>
+                                <v-card-title class="headline">Добавление больницы</v-card-title>
                                 <hr>
-                                    <form method="POST" class="d-flex flex-column">
-                                        {% csrf_token %}
-                                        <label>Название:{{forum.title}} </label>
-                                        <label>Описание:{{forum.text}}</label>
-                                        <input type="submit" />
-                                    </form>
+                                <form method="POST" class="d-flex flex-column">
+                                    {% csrf_token %}
+                                    <label>Название</label>
+                                    {{form.name}}
+                                    <input type="submit" />
+                                </form>
                             </v-card>
                         </v-card>
                 </v-dialog>
             </div>
-        <div>
 
-        </div>
     </v-container>
     </div>
     </v-app>
@@ -76,11 +74,15 @@
     new Vue({
       el: '#app',
       vuetify: new Vuetify(),
-      mounted(){
-        this.dialog={{dialog}}
-        this.isLogged={{islogged}};
-        this.username='{{username}}';
-        this.isAdmin={{isAdmin}}
+      mounted()
+      {
+          this.isLogged={{islogged}};
+          this.username='{{username}}';
+          this.isAdmin={{isAdmin}};
+          if({{open}})
+          {
+            this.dialog=true;
+          }
       },
       data()
       {
@@ -93,10 +95,10 @@
                 news_img:"",
                 news_tag:"",
                 enter:false,
-                topic:[],
+                username:'',
                 isLogged:false,
                 isAdmin:false,
-                username:"",
+
             }
       },
       methods:{
@@ -115,6 +117,23 @@
 
 
 <style>
+.hospitals
+{
+    width:600px;
+}
+
+td
+{
+    border:1px solid black;
+}
+.comment
+{
+    font-size:14px;
+}
+.dateAdd
+{
+    font-size:12px;
+}
 .errors
 {
     position: absolute;
@@ -146,7 +165,7 @@
     border:1px solid black;
     border-radius:5px;
 }
-    .menu{
+  .menu{
         height:220px;
     }
     .NewsText{

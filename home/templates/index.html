@@ -81,12 +81,13 @@
       mounted(){
           this.isLogged={{islogged}};
           this.username='{{username}}';
-          this.isAdmin={{isAdmin}}
+          this.isAdmin={{isAdmin}};
+          console.log(this.username)
       },
       data()
       {
             return{
-                menu:[{name:'Главная страница',url:'index'},{name:'Форум',url:'forum'},{name:'Срочная помощь'},{name:'Подготовка к ребенку'},{name:'Отзывы'}],
+                menu:[{name:'Главная страница',url:'index'},{name:'Форум',url:'forum'},{name:'Подготовка к ребенку',url:'prep'},{name:'Отзывы',url:'MaternityHospital'}],
                 model:'',
                 dialog:false,
                 news_name:"",
@@ -146,7 +147,7 @@
     border-radius:5px;
 }
     .menu{
-        height:300px;
+        height:220px;
     }
     .NewsText{
         width:600px;

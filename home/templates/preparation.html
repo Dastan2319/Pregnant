@@ -13,23 +13,19 @@
         <div >
             <v-container class="d-flex">
              {% include 'menu.html' %}
-            <div>
+            <div style="width=600px;">
                 {% for item in needItems %}
                 <v-card width="600px" class="mt-6">
-                    <v-list-item>
+                    <v-list-item class="ml-6 mr-6">
                         <v-list-item-content>
                             <v-list-item-title class="headline">{{item.name}}</v-list-item-title>
                         </v-list-item-content>
-                        <div v-if="isAdmin == true">
+                        <div >
                             <v-btn href="needitems/{{item.id}}">Перейти</v-btn>
                         </div>
                     </v-list-item>
 
-                    <v-img class="ma-12"
-                        src="{{item.img}}"
-                    ></v-img>
-
-                    <v-card-text>{{item.text}}</v-card-text>
+                    <v-card-text>{{item.description}}</v-card-text>
 
 
                 </v-card>
@@ -38,12 +34,12 @@
             </div>
 
             <div class="mt-6 ml-12" v-if="isAdmin == true">
-                <v-btn  @click="dialog = true">Создать новости</v-btn>
+                <v-btn  @click="dialog = true">Создать список</v-btn>
 
                 <v-dialog v-model="dialog" max-width="500px" >
                         <v-card class="pa-6">
                             <v-card>
-                                <v-card-title class="headline">Добавление новости</v-card-title>
+                                <v-card-title class="headline">Добавление списка</v-card-title>
                                 <hr>
                                 <form method="POST" class="d-flex flex-column">
                                     {% csrf_token %}
@@ -80,7 +76,7 @@
       data()
       {
             return{
-                menu:[{name:'Главная страница',url:'index'},{name:'Форум',url:'forum'},{name:'Срочная помощь'},{name:'Подготовка к ребенку'},{name:'Отзывы'}],
+                menu:[{name:'Главная страница',url:'index'},{name:'Форум',url:'forum'},{name:'Подготовка к ребенку',url:'prep'},{name:'Отзывы',url:'MaternityHospital'}],
                 model:'',
                 dialog:false,
                 news_name:"",
@@ -139,8 +135,8 @@
     border:1px solid black;
     border-radius:5px;
 }
-    .menu{
-        height:300px;
+  .menu{
+        height:220px;
     }
     .NewsText{
         width:600px;

@@ -28,6 +28,32 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    # определения форматтеров
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} {levelname} {process:d}-{thread:d} {name}: {message}',
+            'style': '{',
+        }
+    },
+    # определения обработчиков логов (им назначаются фильтры и форматтеры)
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+    },
+    # определения логгеров (им назначаются обработчики, уровень логгирования, переопределяются фильтры)
+    'loggers': {
+        'home': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False
+        }
+    }
+}
 
 # Application definition
 

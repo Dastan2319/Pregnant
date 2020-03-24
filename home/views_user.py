@@ -8,6 +8,10 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.sessions.models import Session
 from django.contrib.auth import authenticate ,login ,logout
 from home import views
+
+import logging
+logger = logging.getLogger(__name__)
+
 def login_view(request):
     if not request.user.is_authenticated:
         if request.method == 'GET':
@@ -18,9 +22,11 @@ def login_view(request):
                 user = authenticate(request,username=form.cleaned_data['login'],password=form.cleaned_data['password'])
                 if user is not None:
                     login(request,user)
+                    # logger.info('Зашел на сайт ' + str(user.username))
                     return redirect(views.index)
                 else:
                     form.add_error('login','Логин или пароль не верный')
+                    # logger.info('Пытался зайти на сайт ' + form.cleaned_data['login'])
                     return render(request, 'login.html', context=dict(logForm=form))
             else:
                 return render(request, 'login.html', context=dict( logForm=form))
@@ -29,4 +35,6 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
+    # logger.info('Вышел сайта ' + str(request.user.username))
     return redirect(views.index)
+

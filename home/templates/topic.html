@@ -35,8 +35,8 @@
                 </v-card>
                 {% endfor %}
                 </div>
-                <div class="elevation-2 pa-4">
-                    <form method="POST" v-if="isLogged==true" class="d-flex align-center justify-space-between">
+                <div class="elevation-2 pa-4" v-if="isLogged==true">
+                    <form method="POST"  class="d-flex align-center justify-space-between">
                          {% csrf_token %}
                         <label>Комментарии:<span class="pa-2">{{form.text}}</span></label>
                         <v-btn type="submit" >Отправить</v-btn>
@@ -66,7 +66,7 @@
       data()
       {
             return{
-                menu:[{name:'Главная страница',url:'index'},{name:'Форум',url:'forum'},{name:'Срочная помощь'},{name:'Подготовка к ребенку'},{name:'Отзывы'}],
+                menu:[{name:'Главная страница',url:'index'},{name:'Форум',url:'forum'},{name:'Подготовка к ребенку',url:'prep'},{name:'Отзывы',url:'MaternityHospital'}],
                 model:'',
                 dialog:false,
                 news_name:"",
@@ -149,7 +149,7 @@
     border-radius:5px;
 }
     .menu{
-        height:300px;
+        height:220px;
     }
     .NewsText{
         width:600px;
