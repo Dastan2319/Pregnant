@@ -20,23 +20,24 @@ def login_view(request):
         return render(request,'login.html',context=dict(logForm=loginForm))
     if request.method == "POST":
         form = loginForm(request.POST)
-        if form.is_valid():
-            user = authenticate(request,username=form.cleaned_data['login'],password=form.cleaned_data['password'])
-            if user is not None:
-                login(request,user)
-                # logger.info('Зашел на сайт ' + str(user.username))
-                return redirect(views.index)
-            else:
-                form.add_error('login','Логин или пароль не верный')
-                # logger.info('Пытался зайти на сайт ' + form.cleaned_data['login'])
-                return render(request, 'login.html', context=dict(logForm=form))
-        else:
+        if not  form.is_valid():
             return render(request, 'login.html', context=dict( logForm=form))
+
+        user = authenticate(request,username=form.cleaned_data['login'],password=form.cleaned_data['password'])
+        if user is not None:
+            login(request,user)
+            logger.info('Зашел на сайт ' + str(user.username))
+            return redirect(views.index)
+        else:
+            form.add_error('login','Логин или пароль не верный')
+            logger.info('Пытался зайти на сайт ' + form.cleaned_data['login'])
+            return render(request, 'login.html', context=dict(logForm=form))
+
 
 
 
 def logout_view(request):
     logout(request)
-    # logger.info('Вышел сайта ' + str(request.user.username))
+    logger.info('Вышел сайта ' + str(request.user.username))
     return redirect(views.index)
 
