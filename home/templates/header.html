@@ -4,13 +4,16 @@
             <v-toolbar-title class="toolbarTitle">Pregnant</v-toolbar-title>
             <v-toolbar-items class="subtitletoolber">borned to life</v-toolbar-items>
             <v-spacer></v-spacer>
-            <div class="toolberBtns" v-if="isLogged==false">
+            {% if not user.is_authenticated %}
+            <div class="toolberBtns" >
                 <v-btn href="/home/login">Войти</v-btn>
                 <v-btn  href="/home/reg">Регестрация</v-btn>
             </div>
-            <div v-if="isLogged==true" class="toolberBtns" >
-                <span >Здраствуйте</span>
-                <v-btn  href="/home/profile/{{username.id}}">{{username.user}}</v-btn>
+            {% else  %}
+            <div  class="toolberBtns" >
+                <span >Здравствуйте</span>
+                <v-btn  href="/home/profile/{{user.id}}">{{user.username}}</v-btn>
                 <a href="/home/logout">Выйти</a>
             </div>
+            {% endif %}
 </v-toolbar>

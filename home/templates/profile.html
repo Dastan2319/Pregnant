@@ -28,7 +28,8 @@
                             {% endfor %}
                          {% endif %}
                     {% endif %}
-                    <form method="POST" v-if="isProfile==true" class="d-flex flex-column pa-4">
+                    {% if user.id == id  %}
+                    <form method="POST"  class="d-flex flex-column pa-4">
                         {% csrf_token %}
                         <label class="pa-4">Пароль:{{form.password}}</label>
                         <label class="pa-4">Имя:{{form.first_name}}</label>
@@ -36,11 +37,13 @@
                         <label class="pa-4">Почта:{{form.email}}</label>
                         <v-btn type="submit">Сохранить</v-btn>
                     </form>
-                    <form v-if="isProfile==false" class="d-flex flex-column pa-4">
+                    {% else %}
+                    <form class="d-flex flex-column pa-4">
                         <label class="pa-4">Имя:{{form.first_name}}</label>
                         <label class="pa-4">Фамилия:{{form.last_name}}</label>
                         <label class="pa-4">Почта:{{form.email}}</label>
                     </form>
+                    {% endif %}
                 </div>
             </div>
 
@@ -56,42 +59,12 @@
     new Vue({
       el: '#app',
       vuetify: new Vuetify(),
-      mounted()
-      {
-          this.isLogged={{isLogged}};
-          this.username='{{username}}';
-          this.isAdmin={{isAdmin}};
-          this.isProfile={{isProfile}};
-          console.log(this.username)
-      },
       data()
       {
             return{
                 menu:[{name:'Главная страница',url:'index'},{name:'Форум',url:'forum'},{name:'Подготовка к ребенку',url:'prep'},{name:'Отзывы',url:'MaternityHospital'}],
-                model:'',
-                dialog:false,
-                news_name:"",
-                news_text:"",
-                news_img:"",
-                news_tag:"",
-                enter:false,
-                username:'',
-                isLogged:false,
-                isAdmin:false,
-                isProfile:false,
             }
       },
-      methods:{
-        editNews(news)
-        {
-            console.log(news)
-             this.news_name=news.name;
-             this.news_text=news.text;
-             this.news_img=news.img;
-             this.news_tag=news.tag;
-             this.dialog=true;
-        }
-      }
     })
   </script>
 

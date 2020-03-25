@@ -30,8 +30,8 @@
 
                 {% endfor %}
             </div>
-
-            <div class="mt-6 ml-12" v-if="isAdmin">
+             {% if perms.home.add_topic %}
+            <div class="mt-6 ml-12" >
                 <v-btn @click="dialog = true">Создать тему</v-btn>
 
                 <v-dialog v-model="dialog" max-width="500px" >
@@ -61,6 +61,7 @@
                         </v-card>
                 </v-dialog>
             </div>
+            {% endif %}
         <div>
 
         </div>
@@ -78,38 +79,15 @@
       vuetify: new Vuetify(),
       mounted(){
         this.dialog={{dialog}}
-        this.isLogged={{islogged}};
-        this.username='{{username}}';
-        this.isAdmin={{isAdmin}}
       },
       data()
       {
             return{
                 menu:[{name:'Главная страница',url:'index'},{name:'Форум',url:'forum'},{name:'Подготовка к ребенку',url:'prep'},{name:'Отзывы',url:'MaternityHospital'}],
-                model:'',
-                dialog:false,
-                news_name:"",
-                news_text:"",
-                news_img:"",
-                news_tag:"",
-                enter:false,
-                topic:[],
-                isLogged:false,
-                isAdmin:false,
-                username:"",
+                dialog:false
             }
-      },
-      methods:{
-        editNews(news)
-        {
-            console.log(news)
-             this.news_name=news.name;
-             this.news_text=news.text;
-             this.news_img=news.img;
-             this.news_tag=news.tag;
-             this.dialog=true;
-        }
       }
+
     })
   </script>
 

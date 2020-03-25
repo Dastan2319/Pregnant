@@ -45,28 +45,7 @@
       {
             return{
                 menu:[{name:'Главная страница',url:'home'},{name:'Форум',url:'forum'},{name:'Срочная помощь'},{name:'Подготовка к ребенку'},{name:'Отзывы'}],
-                model:'',
-                dialog:false,
-                news_name:"",
-                news_text:"",
-                news_img:"",
-                news_tag:"",
-                isLogged:false,
-                username:'',
-                isAdmin:false,
-
             }
-      },
-      methods:{
-        editNews(news)
-        {
-            console.log(news)
-             this.news_name=news.name;
-             this.news_text=news.text;
-             this.news_img=news.img;
-             this.news_tag=news.tag;
-             this.dialog=true;
-        }
       }
     })
   </script>

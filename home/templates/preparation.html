@@ -16,7 +16,7 @@
             <div style="width=600px;">
                 {% for item in needItems %}
                 <v-card width="600px" class="mt-6">
-                    <v-list-item class="ml-6 mr-6">
+                    <v-list-item class=" mr-6">
                         <v-list-item-content>
                             <v-list-item-title class="headline">{{item.name}}</v-list-item-title>
                         </v-list-item-content>
@@ -32,8 +32,8 @@
 
                 {% endfor %}
             </div>
-
-            <div class="mt-6 ml-12" v-if="isAdmin == true">
+            {% if perms.home.add_preparation %}
+            <div class="mt-6 ml-12" >
                 <v-btn  @click="dialog = true">Создать список</v-btn>
 
                 <v-dialog v-model="dialog" max-width="500px" >
@@ -53,6 +53,7 @@
                         </v-card>
                 </v-dialog>
             </div>
+            {% endif %}
         <div>
 
         </div>
@@ -68,38 +69,14 @@
     new Vue({
       el: '#app',
       vuetify: new Vuetify(),
-      mounted(){
-          this.isLogged={{islogged}};
-          this.username='{{username}}';
-          this.isAdmin={{isAdmin}}
-      },
       data()
       {
             return{
                 menu:[{name:'Главная страница',url:'index'},{name:'Форум',url:'forum'},{name:'Подготовка к ребенку',url:'prep'},{name:'Отзывы',url:'MaternityHospital'}],
-                model:'',
-                dialog:false,
-                news_name:"",
-                news_text:"",
-                news_img:"",
-                news_tag:"",
-                enter:false,
-                isLogged:false,
-                username:'',
-                isAdmin:false,
+                 dialog:false,
             }
       },
-      methods:{
-        editNews(news)
-        {
-            console.log(news)
-             this.news_name=news.name;
-             this.news_text=news.text;
-             this.news_img=news.img;
-             this.news_tag=news.tag;
-             this.dialog=true;
-        }
-      }
+
     })
   </script>
 
